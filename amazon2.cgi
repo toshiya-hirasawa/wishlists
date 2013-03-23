@@ -1,6 +1,7 @@
 #!/usr/bin/ruby
 # encoding:utf-8
 
+require "nkf"
 require "cgi"
 require "open-uri"
 
@@ -20,7 +21,7 @@ flag = "stop"
 file = []
 item = []
 items = []
-
+f1 =""
 cgi = CGI.new
 url = cgi["address"]
 
@@ -29,8 +30,9 @@ if url =~ /^http:\/\/www.amazon.co.jp/
 
 	#htmlを取得してエンコードを変換（SJISからUTF-8に）
 	#htmlは配列fileの第一要素（file[0]）に格納
-	open(url,"r:Shift_JIS") do |f|
-		file << f.read.encode("UTF-8","Shift_JIS")
+	open(url) do |f|
+		f1 = NKF.nkf('-Sw',f.read)
+		file << f1
 	end
 	
 	#一行ごとに処理
