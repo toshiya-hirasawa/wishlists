@@ -18,7 +18,7 @@ Content-type: text/html\n\n
 EOS
 
 flag = "stop"
-file = []
+file = ""
 item = []
 items = []
 f1 =""
@@ -31,12 +31,11 @@ if url =~ /^http:\/\/www.amazon.co.jp/
 	#htmlを取得してエンコードを変換（SJISからUTF-8に）
 	#htmlは配列fileの第一要素（file[0]）に格納
 	open(url) do |f|
-		f1 = NKF.nkf('-Sw',f.read)
-		file << f1
+		file = NKF.nkf('-Sw',f.read)
 	end
 	
 	#一行ごとに処理
-	file[0].each_line do |line|
+	file.each_line do |line|
 		#商品名
 		if line =~ /small productTitle/
 			flag = "on" 
