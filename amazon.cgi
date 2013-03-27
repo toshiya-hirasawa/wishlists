@@ -1,6 +1,7 @@
 #!/usr/bin/ruby
 # encoding:utf-8
 
+require "nkf"
 require "cgi"
 require "open-uri"
 
@@ -10,35 +11,31 @@ Content-type: text/html\n\n
 <!DOCTYPE html>
 	<head>
 		<meta charset ="UTF-8"/>
-		<title>test</title>
+		<title>This is Your Wish Lists?</title>
 	</head>
 	<body>
-		<form action="amazon.cgi" method="post">
-			<input type="text" name="textdata" value=""/>
-			<input type="submit" value="表示"/>
-		</form>
 
 EOS
 
 flag = "stop"
-file = []
+file = ""
 item = []
 items = []
-
+f1 =""
 cgi = CGI.new
-url = cgi["textdata"]
+url = cgi["address"]
 
 #最初にアドレスをチェック
 if url =~ /^http:\/\/www.amazon.co.jp/
 
 	#htmlを取得してエンコードを変換（SJISからUTF-8に）
 	#htmlは配列fileの第一要素（file[0]）に格納
-	open(url,"r:Shift_JIS") do |f|
-		file << f.read.encode("UTF-8","Shift_JIS")
+	open(url) do |f|
+		file = NKF.nkf('-Sw',f.read)
 	end
 	
 	#一行ごとに処理
-	file[0].each_line do |line|
+	file.each_line do |line|
 		#商品名
 		if line =~ /small productTitle/
 			flag = "on" 
