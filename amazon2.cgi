@@ -86,17 +86,12 @@ if url =~ /^http:\/\/www.amazon.co.jp/
 	items.each do |x|
 		puts x
 	end
-
-	puts <<-EOS
-		</body>
-	</html>
-	EOS
 	
 else
 	puts "error!"
-	puts <<-EOS
-		</body>
-	</html>
-	EOS
 end
+puts <<-EOS
+	</body>
+</html>
+EOS
 
